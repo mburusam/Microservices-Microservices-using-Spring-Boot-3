@@ -8,6 +8,7 @@ import com.smburu.employeeservice.repository.EmployeeRepository;
 import com.smburu.employeeservice.service.ApiClient;
 import com.smburu.employeeservice.service.EmployeeService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -45,7 +46,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         return saveEmployeeDto;
     }
 
-    @CircuitBreaker(name = "${spring.application.name}",fallbackMethod ="getDefaultDepartment")
+    //@CircuitBreaker(name = "${spring.application.name}",fallbackMethod ="getDefaultDepartment")
+    @Retry(name="${spring.application.name}",fallbackMethod ="getDefaultDepartment")
     @Override
     public ApiResponseDto getEmployeeeById(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId).get();
