@@ -2,6 +2,7 @@ package com.smburu.departmentservice.service.impl;
 
 import com.smburu.departmentservice.dto.DepartmentDto;
 import com.smburu.departmentservice.entity.Department;
+import com.smburu.departmentservice.mapper.DepartmentMapper;
 import com.smburu.departmentservice.repository.DepartmentRepository;
 import com.smburu.departmentservice.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
@@ -14,19 +15,24 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
     @Override
     public DepartmentDto saveDepartment(DepartmentDto departmentDto) {
-        Department department = new Department(
+  /*      Department department = new Department(
                 departmentDto.getId(),
                 departmentDto.getDepartmentName(),
                 departmentDto.getDepartmentDescription(),
                 departmentDto.getDepartmentCode()
-        );
+        );*/
+
+        Department department = DepartmentMapper.mapToDepartment(departmentDto);
+
         Department savedDepartment = departmentRepository.save(department);
-        DepartmentDto departmentDto1 = new DepartmentDto(
+        /*DepartmentDto departmentDto1 = new DepartmentDto(
               savedDepartment.getId(),
               savedDepartment.getDepartmentName(),
               savedDepartment.getDepartmentDescription(),
               savedDepartment.getDepartmentCode()
-        );
+        );*/
+        DepartmentDto departmentDto1 = DepartmentMapper.mapToDepartmentDto(savedDepartment);
+
         return departmentDto1;
     }
 
