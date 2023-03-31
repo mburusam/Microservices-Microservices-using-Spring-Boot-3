@@ -7,6 +7,7 @@ import com.smburu.employeeservice.entity.Employee;
 import com.smburu.employeeservice.repository.EmployeeRepository;
 import com.smburu.employeeservice.service.ApiClient;
 import com.smburu.employeeservice.service.EmployeeService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return saveEmployeeDto;
     }
 
+    @CircuitBreaker(name = "${spring.application.name}",fallbackMethod ="getDefaultDepartment")
     @Override
     public ApiResponseDto getEmployeeeById(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId).get();
@@ -77,5 +79,30 @@ public class EmployeeServiceImpl implements EmployeeService {
         apiResponseDto.setDepartmentDto(departmentDto);
 
         return apiResponseDto;
+    }
+
+    public ApiResponseDto getDefaultDepartment(Long employeeId,Exception e){
+
+            Employee employee = employeeRepository.findById(employeeId).get();
+
+        DepartmentDto departmentDto = new DepartmentDto();
+        departmentDto.setDepartmentName("R&D Department");
+        departmentDto.setDepartmentCode("RD001");
+        departmentDto.setDepartmentDescription("Research and Development Department");
+
+            EmployeeDto employeeDto = new EmployeeDto(
+                    employee.getId(),
+                    employee.getFirstName(),
+                    employee.getLastName(),
+                    employee.getEmail(),
+                    employee.getDepartmentCode()
+            );
+
+            ApiResponseDto apiResponseDto = new ApiResponseDto();
+            apiResponseDto.setEmployeeDto(employeeDto);
+            apiResponseDto.setDepartmentDto(departmentDto);
+
+            return apiResponseDto;
+
     }
 }
