@@ -66,6 +66,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 */
         DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
 
+
  /*       EmployeeDto employeeDto = new EmployeeDto(
                 employee.getId(),
                 employee.getFirstName(),

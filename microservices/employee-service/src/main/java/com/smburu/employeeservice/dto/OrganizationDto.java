@@ -1,4 +1,4 @@
-package com.smburu.organizationservice.dto;
+package com.smburu.employeeservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
